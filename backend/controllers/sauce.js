@@ -44,7 +44,6 @@ exports.modifySauce = (req, res, next) => {
         }`,
       }
     : { ...req.body };
-
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const filename = sauce.imageUrl.split("/images/")[1];
@@ -92,8 +91,6 @@ exports.getAllThings = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-  console.log(req.body);
-  console.log(req.params.id);
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const userAvecDislike = sauce.usersDisliked.indexOf(req.body.userId) >= 0;

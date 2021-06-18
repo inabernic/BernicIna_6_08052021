@@ -15,17 +15,16 @@ Content-Type: application/json
 }
 ###
 
-GET http://localhost:3000/api/sauces/60c36436635caf29148955a8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGJhMjVlOWFhYTcxYjJjZDg5Yjc3MjMiLCJpYXQiOjE2MjI4MTc3NTUsImV4cCI6MTYyMjkwNDE1NX0.SWAFofvUBv-sixUzbRAIXukLDUeEjkpZhjD2gx6HxH8
+GET http://localhost:3000/api/sauces/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGJhMjVlOWFhYTcxYjJjZDg5Yjc3MjMiLCJpYXQiOjE2MjQwMjM5MjIsImV4cCI6MTYyNDExMDMyMn0.xW7tWGTsWSxF59NCBcVCqiiMl8erTiy_Hk2OvjG6q14
 
 ###
-PUT http://localhost:3000/api/stuff/60b0f0dd095c5c02604c7c55
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGJhMjVlOWFhYTcxYjJjZDg5Yjc3MjMiLCJpYXQiOjE2MjI4MTc3NTUsImV4cCI6MTYyMjkwNDE1NX0.SWAFofvUBv-sixUzbRAIXukLDUeEjkpZhjD2gx6HxH8
+PUT http://localhost:3000/api/sauces/60cc5e81a6e14c10dc304752
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGJhMjVlOWFhYTcxYjJjZDg5Yjc3MjMiLCJpYXQiOjE2MjQwMjM5MjIsImV4cCI6MTYyNDExMDMyMn0.xW7tWGTsWSxF59NCBcVCqiiMl8erTiy_Hk2OvjG6q14
 Content-Type: application/json
 
 {
-    "title":"new laptop",
-    "userId": "60b0ee39095c5c02604c7c53"
+    "name":"new laptop"
 }
 
 
