@@ -26,8 +26,7 @@ exports.getOneSauce = (req, res, next) => {
     _id: req.params.id,
   })
     .then((sauce) => {
-     return res.status(200).json(sauce);
-
+      return res.status(200).json(sauce);
     })
     .catch((error) => {
       res.status(404).json({
@@ -46,7 +45,7 @@ exports.modifySauce = (req, res, next) => {
       }
     : { ...req.body };
 
-    Sauce.findOne({ _id: req.params.id })
+  Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const filename = sauce.imageUrl.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
@@ -54,8 +53,8 @@ exports.modifySauce = (req, res, next) => {
           { _id: req.params.id },
           { ...sauceObject, _id: req.params.id }
         )
-        .then(() => res.status(200).json({ message: "Objet modifié !" }))
-        .catch((error) => res.status(400).json({ error }));
+          .then(() => res.status(200).json({ message: "Objet modifié !" }))
+          .catch((error) => res.status(400).json({ error }));
       });
     })
     .catch((error) => res.status(500).json({ error }));
@@ -94,4 +93,37 @@ exports.getAllThings = (req, res, next) => {
 
 exports.likeSauce = (req, res, next) => {
   console.log(req.body);
+  console.log(req.params.id);
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      const userAvecDislike = sauce.usersDisliked.indexOf(req.body.userId) >= 0;
+      const userAvecLike = sauce.usersLiked.indexOf(req.body.userId) >= 0;
+      //cas like
+      if (req.body.like == 1 && !userAvecLike) {
+        sauce.likes += req.body.like;
+        sauce.usersLiked.push(req.body.userId);
+      }
+      //cas dislike
+      if (req.body.like == -1 && !userAvecDislike) {
+        sauce.dislikes += req.body.like;
+        sauce.usersDisliked.push(req.body.userId);
+      }
+      //cas enleve like ou dislike
+      if (req.body.like == 0) {
+        //enleve dislike
+        if (userAvecDislike) {
+          sauce.dislikes--;
+          sauce.usersDisliked.remove(req.body.userId);
+        }
+        //enleve like
+        if (userAvecLike) {
+          sauce.likes--;
+          sauce.usersLiked.remove(req.body.userId);
+        }
+      }
+
+      sauce.save();
+    })
+    .then(() => res.status(200).json({ message: "liked" }))
+    .catch((error) => res.status(500).json({ error }));
 };
