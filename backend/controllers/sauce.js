@@ -105,7 +105,7 @@ exports.likeSauce = (req, res, next) => {
       }
       //cas dislike
       if (req.body.like == -1 && !userAvecDislike) {
-        sauce.dislikes += req.body.like;
+        sauce.dislikes -= req.body.like;
         sauce.usersDisliked.push(req.body.userId);
       }
       //cas enleve like ou dislike
