@@ -1,23 +1,28 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
-
 const sauceRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 const Sauce = require("./models/Sauce");
 
-mongoose
-  .connect(
-    "mongodb+srv://user:H9posegDoJWMJVXX@cluster0.bxmom.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    //"mongodb+srv://Ina:Inulea10101@cluster0.bxmom.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+// Connection to MongoBD and masking of ID, MPD, ADDRESS with DOTENV
+const ID = process.env.ID;
+const MDP = process.env.PASS;
+const ADDRESS = process.env.ADDRESS
+
+mongoose.connect(
+    `mongodb+srv://${ID}:${MDP}@${ADDRESS}`,
     { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+ )
+ .then(() => console.log('Connexion à MongoDB réussie !'))
+ .catch(() => console.log("Connexion à MongoDB échouée !" ));
 
 const app = express();
 
+
+//CORS - Blocks HTTP calls between different servers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -30,6 +35,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+
 
 app.use(bodyParser.json());
 app.use("/images", express.static(path.join(__dirname, "images")));
