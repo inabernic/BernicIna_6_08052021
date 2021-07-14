@@ -22,10 +22,10 @@ Puis lancez le serveur: nodemon server.
 
 ## Connexxion
 Ouvrir localhost:4200 dans votre navigateur.
-Pour s'inscrire sur l'application, l'utilisateur doit fournir un email et un mot de passe contenant 08 caractères minimum (dont 1 majuscule, 1 minuscule, 1 chiffre, pas de symbole, espaces autorisés).
+Pour s'inscrire sur l'application, l'utilisateur doit fournir un email correct et un mot de passe contenant 08 caractères minimum (dont 1 majuscule, 1 minuscule, 1 chiffre, pas de symbole, espaces autorisés).
 Hébergement sur MongoDB Atlas
 Toutes les opérations de la base de données utilisent le pack Mongoose avec des schémas de données stricts.
 
  La clé secrete JWT securisé, est pas presente en valeur par default dans le code source, le fichier est externalisé à l'aide du package dotenv. 
- Creer un fichier  .env avec les données 
+ Creer un fichier  .env avec les données et le variable sous forme NAME=VALUE
  Cette donne est une cle que vous taper pas hasard. Par example pour le token codé et decodé on vas avoir la partie de connexion à la bdd (la partie utilisateur, la partie mdp  et la partie cluster), et les valeurs de cette clé qui va donner acces. aux utilisateur à la connexion.
