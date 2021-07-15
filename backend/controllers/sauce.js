@@ -60,7 +60,7 @@ exports.modifySauce = (req, res, next) => {
     : { ...req.body };
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
-      // On supprime l'ancienne image du serveur
+      //on recupere le nom de l'ancienne image
       const filename = sauce.imageUrl.split("/images/")[1];
       Sauce.updateOne(
         { _id: req.params.id },
@@ -69,6 +69,7 @@ exports.modifySauce = (req, res, next) => {
         .then(() => {
           if (req.file) {
             fs.unlink(`images/${filename}`, () =>
+              // On supprime l'ancienne image du serveur
               console.log("unlink image:" + `images/${filename}`)
             );
           }

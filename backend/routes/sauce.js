@@ -25,7 +25,7 @@ const sauceCtrl = require("../controllers/sauce");
 // Création des différentes ROUTES de l'API en leurs précisant, dans l'ordre, leurs middlewares et controllers
 
 // Route qui permet de récupérer toutes les sauces
-// Renvoie le tableau de toutes les sauces dans la base de données
+// Renvoie le tableau de toutes les sauces depuis la base de données
 router.get("/", auth, sauceCtrl.getAllSauces);
 
 // Route qui permet de créer "une sauce"
