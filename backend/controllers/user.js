@@ -10,6 +10,7 @@ const User = require("../models/User");
 // Middleware pour crée un nouvel utilisateur
 // On sauvegarde un nouvel utilisateur et crypte son mot de passe avec un hash généré par bcrypt
 /**  Functions for user signup **/
+const mailformat = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 exports.signup = (req, res) => {
   if (
     !(
@@ -24,11 +25,7 @@ exports.signup = (req, res) => {
       message:
         "Mot de passe doit contenir au moins 1 chiffre,au moins 1 majuscule,au moins 1 minuscule, ,au moins 1 caractère spécial,minimum 8 caractères.",
     });
-  } else if (
-    !req.body.email.match(
-      /^(([^<>()[]\.,;:s@]+(.[^<>()[]\.,;:s@]+)*)|(.+))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/
-    )
-  ) {
+  } else if (!req.body.email.match(mailformat)) {
     return res.status(400).json({
       message: "L'email n'est pas conforme.",
     });
@@ -57,6 +54,8 @@ exports.signup = (req, res) => {
 
 // Le Middleware pour la connexion d'un utilisateur vérifie si l'utilisateur existe dans la base MongoDB lors du login
 //si oui il vérifie son mot de passe, s'il est bon il renvoie un TOKEN contenant l'id de l'utilisateur, sinon il renvoie une erreur
+
+const SECRET_TOKEN = process.env.SECRET_TOKEN;
 /**  Functions for user login **/
 exports.login = (req, res, next) => {
   // On doit trouver l'utilisateur dans la BDD qui correspond à l'adresse entrée par l'utilisateur
@@ -85,7 +84,7 @@ exports.login = (req, res, next) => {
               {
                 userId: user._id,
               }, // Encodage de l'userdID nécéssaire dans le cas où une requête transmettrait un userId (ex: modification d'une sauce)
-              "RANDOM_TOKEN_SECRET", // Clé d'encodage du token qui peut être rendue plus complexe en production
+              SECRET_TOKEN, // Clé d'encodage du token qui peut être rendue plus complexe en production
               // Argument de configuration avec une expiration au bout de 24h
               {
                 expiresIn: "24h",

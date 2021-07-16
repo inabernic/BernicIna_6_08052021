@@ -127,12 +127,12 @@ exports.likeSauce = (req, res, next) => {
       const userAvecDislike = sauce.usersDisliked.indexOf(req.body.userId) >= 0;
       const userAvecLike = sauce.usersLiked.indexOf(req.body.userId) >= 0;
       //cas like
-      if (req.body.like == 1 && !userAvecLike) {
+      if (req.body.like == 1 && !userAvecLike && !userAvecDislike) {
         sauce.likes += req.body.like;
         sauce.usersLiked.push(req.body.userId);
       }
       //cas dislike
-      if (req.body.like == -1 && !userAvecDislike) {
+      if (req.body.like == -1 && !userAvecDislike && !userAvecLike) {
         sauce.dislikes -= req.body.like;
         sauce.usersDisliked.push(req.body.userId);
       }
