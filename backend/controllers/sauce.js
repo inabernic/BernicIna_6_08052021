@@ -25,9 +25,17 @@ exports.createSauce = (req, res, next) => {
   sauce
     .save()
     // On envoi une réponse au frontend avec un statut 201 sinon on a une expiration de la requête
-    .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+    .then(() =>
+      res.status(201).json({
+        message: "Objet enregistré !",
+      })
+    )
     // On ajoute un code erreur en cas de problème
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) =>
+      res.status(400).json({
+        error,
+      })
+    );
 };
 
 // Permet de récupérer une seule sauce, identifiée par son id depuis la base MongoDB
@@ -57,14 +65,23 @@ exports.modifySauce = (req, res, next) => {
           req.file.filename
         }`,
       }
-    : { ...req.body };
-  Sauce.findOne({ _id: req.params.id })
+    : {
+        ...req.body,
+      };
+  Sauce.findOne({
+    _id: req.params.id,
+  })
     .then((sauce) => {
       //on recupere le nom de l'ancienne image
       const filename = sauce.imageUrl.split("/images/")[1];
       Sauce.updateOne(
-        { _id: req.params.id },
-        { ...sauceObject, _id: req.params.id }
+        {
+          _id: req.params.id,
+        },
+        {
+          ...sauceObject,
+          _id: req.params.id,
+        }
       )
         .then(() => {
           if (req.file) {
@@ -74,28 +91,56 @@ exports.modifySauce = (req, res, next) => {
             );
           }
         })
-        .then(() => res.status(200).json({ message: "Objet modifié !" }))
-        .catch((error) => res.status(400).json({ error }));
+        .then(() =>
+          res.status(200).json({
+            message: "Objet modifié !",
+          })
+        )
+        .catch((error) =>
+          res.status(400).json({
+            error,
+          })
+        );
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) =>
+      res.status(500).json({
+        error,
+      })
+    );
 };
 
 // Permet de supprimer la sauce
 exports.deleteSauce = (req, res, next) => {
   // Avant de suppr l'objet, on va le chercher pour obtenir l'url de l'image et supprimer le fichier image de la base
-  Sauce.findOne({ _id: req.params.id })
+  Sauce.findOne({
+    _id: req.params.id,
+  })
     .then((sauce) => {
       // Pour extraire ce fichier, on récupère l'url de la sauce, et on le split autour de la chaine de caractères, donc le nom du fichier
       const filename = sauce.imageUrl.split("/images/")[1];
       // Avec ce nom de fichier, on appelle unlink pour suppr le fichier
       fs.unlink(`images/${filename}`, () => {
         // On supprime le document correspondant de la base de données
-        Sauce.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: "Objet supprimé !" }))
-          .catch((error) => res.status(400).json({ error }));
+        Sauce.deleteOne({
+          _id: req.params.id,
+        })
+          .then(() =>
+            res.status(200).json({
+              message: "Objet supprimé !",
+            })
+          )
+          .catch((error) =>
+            res.status(400).json({
+              error,
+            })
+          );
       });
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) =>
+      res.status(500).json({
+        error,
+      })
+    );
 };
 
 // Permet de récuperer toutes les sauces de la base MongoDB
@@ -117,27 +162,34 @@ exports.getAllSauces = (req, res, next) => {
 exports.getAllThings = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
-    .catch((error) => res.status(400).json({ error: error }));
+    .catch((error) =>
+      res.status(400).json({
+        error: error,
+      })
+    );
 };
 
 // Permet de "liker"ou "dislaker" une sauce
 exports.likeSauce = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id })
+  Sauce.findOne({
+    _id: req.params.id,
+  })
     .then((sauce) => {
       const userAvecDislike = sauce.usersDisliked.indexOf(req.body.userId) >= 0;
       const userAvecLike = sauce.usersLiked.indexOf(req.body.userId) >= 0;
-      //cas like
-      if (req.body.like == 1 && !userAvecLike && !userAvecDislike) {
-        sauce.likes += req.body.like;
-        sauce.usersLiked.push(req.body.userId);
-      }
-      //cas dislike
-      if (req.body.like == -1 && !userAvecDislike && !userAvecLike) {
-        sauce.dislikes -= req.body.like;
-        sauce.usersDisliked.push(req.body.userId);
-      }
-      //cas enleve like ou dislike
-      if (req.body.like == 0) {
+      if (!userAvecLike && !userAvecDislike) {
+        //cas like
+        if (req.body.like == 1) {
+          sauce.likes += req.body.like;
+          sauce.usersLiked.push(req.body.userId);
+        }
+        //cas dislike
+        if (req.body.like == -1) {
+          sauce.dislikes -= req.body.like;
+          sauce.usersDisliked.push(req.body.userId);
+        }
+      } //cas enleve like ou dislike
+      else if (req.body.like == 0) {
         //enleve dislike
         if (userAvecDislike) {
           sauce.dislikes--;
@@ -152,6 +204,14 @@ exports.likeSauce = (req, res, next) => {
 
       sauce.save();
     })
-    .then(() => res.status(200).json({ message: "liked" }))
-    .catch((error) => res.status(500).json({ error }));
+    .then(() =>
+      res.status(200).json({
+        message: "liked",
+      })
+    )
+    .catch((error) =>
+      res.status(500).json({
+        error,
+      })
+    );
 };
